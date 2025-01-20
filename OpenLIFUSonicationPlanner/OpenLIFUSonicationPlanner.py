@@ -284,7 +284,7 @@ class OpenLIFUSonicationPlannerWidget(ScriptedLoadableModuleWidget, VTKObservati
         self.updateInputOptions()
 
     def onComputeSolutionClicked(self):
-        activeProtocol, activeTransducer, activeVolume, activeTarget = self.algorithm_input_widget.get_current_data()
+        activeData = self.algorithm_input_widget.get_current_data()
 
         # In case a PNP was previously being displayed, hide it since it is about to no longer belong to the active solution.
         self.ui.renderPNPCheckBox.checked = False
@@ -294,7 +294,8 @@ class OpenLIFUSonicationPlannerWidget(ScriptedLoadableModuleWidget, VTKObservati
             try:
                 self.ui.solutionProgressBar.maximum = 0
                 slicer.app.processEvents()
-                self.logic.computeSolution(activeVolume, activeTarget, activeTransducer, activeProtocol)
+                self.logic.computeSolution(activeData["Volume"], activeData["Target"],
+                                           activeData["Transducer"], activeData["Protocol"])
             finally:
                 self.updateSolutionProgressBar()
 
